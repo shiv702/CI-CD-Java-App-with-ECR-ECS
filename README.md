@@ -1,1 +1,1 @@
-# CI-CD-Java-App
+# CI/CD-Java-App
