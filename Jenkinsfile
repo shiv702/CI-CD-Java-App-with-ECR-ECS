@@ -8,7 +8,7 @@ pipeline {
     environment {
         registryCredential = 'ecr:us-east-1:awscreds'
         appRegistry = '334671708617.dkr.ecr.us-east-1.amazonaws.com/myregistory'
-        AWSRegistry = "https://334671708617.dkr.ecr.us-east-1.amazonaws.com"
+        awsRegistry = "https://334671708617.dkr.ecr.us-east-1.amazonaws.com"
     }
 
     stages {
@@ -23,7 +23,7 @@ pipeline {
         stage('Upload App Image') {
           steps{
             script {
-              docker.withRegistry( AWSRegistry, registryCredential ) {
+              docker.withRegistry( awsRegistry, registryCredential ) {
                 dockerImage.push("$BUILD_NUMBER")
                 dockerImage.push('latest')
               }
