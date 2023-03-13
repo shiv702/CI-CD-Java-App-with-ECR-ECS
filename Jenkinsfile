@@ -7,7 +7,7 @@ pipeline {
     
     environment {
         registryCredential = 'ecr:us-east-1:awscreds'
-        appRegistry = '334671708617.dkr.ecr.us-east-1.amazonaws.com/aws-ecr-java-app'
+        appRegistry = '334671708617.dkr.ecr.us-east-1.amazonaws.com/ecr'
         awsRegistry = "https://334671708617.dkr.ecr.us-east-1.amazonaws.com"
         cluster = "Stagging-Environment"
         service = "java-app-service"
