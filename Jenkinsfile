@@ -16,7 +16,7 @@ pipeline {
         stage('Build and Push Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build("${appRegistry}:${BUILD_NUMBER}", "./Dockerfiles/")
+                    dockerImage = docker.build("${appRegistry}:${BUILD_NUMBER}", "./Dockerfiles")
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                         sh "docker login -u AWS -p \"${AWS_SECRET_ACCESS_KEY}\" ${appRegistry}:${BUILD_NUMBER}"
                         sh "docker push ${appRegistry}:${BUILD_NUMBER}"
