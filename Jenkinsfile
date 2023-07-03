@@ -18,14 +18,14 @@ pipeline {
                 script {
                     dockerImage = docker.build("${appRegistry}:${BUILD_NUMBER}", "./Dockerfiles/App")
                     
-                    withCredentials([
-                        [
-                            $class: 'AmazonWebServicesCredentialsBinding',
-                            credentialsId: 'aws_creds',
-                            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                        ]
-                    ]) {
+                 //withCredentials([
+                   //     [
+                     //       $class: 'AmazonWebServicesCredentialsBinding',
+                       //     credentialsId: 'aws_creds',
+                         //   accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                          //  secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                        //]
+                    //]) {
                         withDockerRegistry([credentialsId: 'aws_creds', url: 'https://860597918607.dkr.ecr.us-east-1.amazonaws.com']) {
                             sh "docker push ${appRegistry}:${BUILD_NUMBER}"
                         }
