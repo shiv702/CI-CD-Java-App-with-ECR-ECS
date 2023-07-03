@@ -18,10 +18,8 @@ pipeline {
                 script {
                     dockerImage = docker.build("${appRegistry}:${BUILD_NUMBER}", "./Dockerfiles/App")
                     
-{
-                        withDockerRegistry([credentialsId: 'aws_creds', url: 'https://860597918607.dkr.ecr.us-east-1.amazonaws.com']) {
-                            sh "docker push ${appRegistry}:${BUILD_NUMBER}"
-                        }
+                    withDockerRegistry([credentialsId: 'aws_creds', url: 'https://860597918607.dkr.ecr.us-east-1.amazonaws.com']) {
+                        sh "docker push ${appRegistry}:${BUILD_NUMBER}"
                     }
                 }
             }
