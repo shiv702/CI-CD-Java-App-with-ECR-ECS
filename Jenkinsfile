@@ -6,11 +6,12 @@ pipeline {
     agent any
     
     environment {
-        registryCredential = credentials('AWS_Credentials')
         appRegistry = '860597918607.dkr.ecr.us-east-1.amazonaws.com/java-repo'
         awsRegistry = "https://860597918607.dkr.ecr.us-east-1.amazonaws.com"
         cluster = "jenkins"
         service = "java-svc"
+        AWS_ACCESS_KEY_ID = "AKIA4QX5CDOH5KSPA4FL"
+        AWS_SECRET_ACCESS_KEY = "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"
     }
 
     stages {
