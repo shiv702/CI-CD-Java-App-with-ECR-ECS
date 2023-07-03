@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'
-        appRegistry = '860597918607.dkr.ecr.us-east-1.amazonaws.com/java-repo'
+        appRegistry = 'https://github.com/shiv702/CI-CD-Java-App-with-ECR-ECS.git'
     }
     
     stages {
