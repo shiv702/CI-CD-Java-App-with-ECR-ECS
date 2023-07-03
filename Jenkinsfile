@@ -15,7 +15,7 @@ pipeline {
         stage('Build and Push Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t 860597918607.dkr.ecr.us-east-1.amazonaws.com/java-repo:latest:latest .'
+                    sh 'docker build -t 860597918607.dkr.ecr.us-east-1.amazonaws.com/java-repo:latest .'
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                         sh 'docker login -u AWS -p "$(AWS_SECRET_ACCESS_KEY)" 860597918607.dkr.ecr.us-east-1.amazonaws.com/java-repo:latest'
                         sh 'docker push your-image-name:latest'
