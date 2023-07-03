@@ -4,7 +4,6 @@ pipeline {
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'
         appRegistry = '860597918607.dkr.ecr.us-east-1.amazonaws.com/java-repo'
-        
     }
     
     stages {
@@ -26,7 +25,9 @@ pipeline {
                             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                         ]
                     ]) {
-                        sh "docker login -u AWS -p \"${AWS_SECRET_ACCESS_KEY}\" ${appRegistry}:${BUILD_NUMBER}"
+                        withEnv(["AWS_SECRET_ACCESS_KEY=\$AWS_SECRET_ACCESS_KEY"]) {
+                            sh "docker login -u AWS --password-stdin ${appRegistry}:${BUILD_NUMBER}"
+                        }
                         sh "docker push ${appRegistry}:${BUILD_NUMBER}"
                     }
                 }
