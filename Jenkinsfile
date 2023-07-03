@@ -26,7 +26,7 @@ pipeline {
         stage('Upload App Image') {
             steps {
                 script {
-                    docker.withRegistry(awsRegistry, 'ecr:us-east-1') {
+                    docker.withRegistry('https://860597918607.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1') {
                         dockerImage.push("$BUILD_NUMBER")
                         dockerImage.push('latest')
                     }
