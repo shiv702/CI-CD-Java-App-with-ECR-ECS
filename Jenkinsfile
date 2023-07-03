@@ -9,8 +9,8 @@ pipeline {
         registryCredential = 'java-repo:us-east-1:awscreds'
         appRegistry = '860597918607.dkr.ecr.us-east-1.amazonaws.com/java-repo'
         awsRegistry = "https://860597918607.dkr.ecr.us-east-1.amazonaws.com"
-        cluster = "Stage"
-        service = "service-stage"
+        cluster = "jenkins"
+        service = "java-svc"
     }
 
     stages {
