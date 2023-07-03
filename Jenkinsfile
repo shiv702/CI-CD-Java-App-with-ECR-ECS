@@ -25,9 +25,7 @@ pipeline {
                             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                         ]
                     ]) {
-                        withEnv(["AWS_SECRET_ACCESS_KEY=\$AWS_SECRET_ACCESS_KEY"]) {
-                            sh "docker login -u AWS -p \"${AWS_SECRET_ACCESS_KEY}\" ${appRegistry}:${BUILD_NUMBER}"
-                        }
+                        sh "docker login -u AWS -p \"${env.AWS_SECRET_ACCESS_KEY}\" ${appRegistry}:${BUILD_NUMBER}"
                         sh "docker push ${appRegistry}:${BUILD_NUMBER}"
                     }
                 }
