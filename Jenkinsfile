@@ -24,23 +24,24 @@ pipeline {
         }
         
         stage('Upload App Image') {
-          steps{
-            script {
-              docker.withRegistry( awsRegistry, registryCredential ) {
-                dockerImage.push("$BUILD_NUMBER")
-                dockerImage.push('latest')
-              }
+            steps {
+                script {
+                    docker.withRegistry(awsRegistry, 'ecr:us-east-1:AWS_Credentials') {
+                        dockerImage.push("$BUILD_NUMBER")
+                        dockerImage.push('latest')
+                    }
+                }
             }
-          }
         }
         
-         stage('Deploy to ECS staging') {
-             steps {
-                 withAWS(credentials: 'AWS_Credentials', region: 'us-east-1') {
-                     sh 'aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment'
-                 } 
-             }
-         }
-        
+        stage('Deploy to ECS staging') {
+            steps {
+                withAWS(credentials: 'AWS_Credentials', region: 'us-east-1') {
+                    sh "aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID"
+                    sh "aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY"
+                    sh "aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment"
+                } 
+            }
+        }
     }
 }
