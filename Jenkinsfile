@@ -6,7 +6,7 @@ pipeline {
     agent any
     
     environment {
-        registryCredential = 'AWS_Credentials'
+        registryCredential = credentials('AWS_Credentials')
         appRegistry = '860597918607.dkr.ecr.us-east-1.amazonaws.com/java-repo'
         awsRegistry = "https://860597918607.dkr.ecr.us-east-1.amazonaws.com"
         cluster = "jenkins"
