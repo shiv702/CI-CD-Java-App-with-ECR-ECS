@@ -1,46 +1,42 @@
-def COLOR_MAP = [
-    'SUCCESS': 'good', 
-    'FAILURE': 'danger',
-]
 pipeline {
     agent any
     
     environment {
-        appRegistry = '860597918607.dkr.ecr.us-east-1.amazonaws.com/java-repo'
-        awsRegistry = "https://860597918607.dkr.ecr.us-east-1.amazonaws.com"
-        cluster = "jenkins"
-        service = "java-svc"
-        AWS_ACCESS_KEY_ID = "AKIA4QX5CDOH5KSPA4FL"
-        AWS_SECRET_ACCESS_KEY = "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"
+        AWS_DEFAULT_REGION = 'us-east-1'
     }
-
+    
     stages {
-        stage('Build App Image') {
+        stage('Checkout') {
             steps {
-                script {
-                    dockerImage = docker.build( appRegistry + ":$BUILD_NUMBER", "./Dockerfiles/App/")
-                }
+                checkout scm
             }
         }
         
-        stage('Upload App Image') {
+        stage('Build and Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://860597918607.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1') {
-                        dockerImage.push("$BUILD_NUMBER")
-                        dockerImage.push('latest')
+                    sh 'docker build -t 860597918607.dkr.ecr.us-east-1.amazonaws.com/java-repo:latest:latest .'
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                        sh 'docker login -u AWS -p "$(AWS_SECRET_ACCESS_KEY)" 860597918607.dkr.ecr.us-east-1.amazonaws.com/java-repo:latest'
+                        sh 'docker push your-image-name:latest'
                     }
                 }
             }
         }
         
-        stage('Deploy to ECS staging') {
+        stage('Deploy to ECS') {
             steps {
-                withAWS(credentials: 'AWS_Credentials', region: 'us-east-1') {
-                    sh "aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID"
-                    sh "aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY"
-                    sh "aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment"
-                } 
+                script {
+                    ecsTask([
+                        cluster: 'jenkins',
+                        taskDefinition: 'javacode',
+                        container: 'java-container',
+                        image: '860597918607.dkr.ecr.us-east-1.amazonaws.com/java-repo:latest',
+                        awsAccessKeyId: 'AKIA4QX5CDOH5KSPA4FL',
+                        awsSecretAccessKey: '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',
+                        awsRegion: 'us-east-1'
+                    ])
+                }
             }
         }
     }
