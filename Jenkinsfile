@@ -29,14 +29,13 @@ pipeline {
             steps {
                 catchError {
                     script {
-                        ecsTask([
-                            cluster: 'jenkins',
-                            taskDefinition: 'javacode',
-                            container: 'java-container',
-                            image: "${appRegistry}:${BUILD_NUMBER}",
-                            awsAccessKeyIdVariable: 'AWS_ACCESS_KEY_ID',
-                            awsSecretAccessKeyVariable: 'AWS_SECRET_ACCESS_KEY',
-                            awsRegion: 'us-east-1'
+                        withAWS(credentials: 'aws_creds', region: 'us-east-1') {
+                            ecsDeploy(
+                                 clusterName: 'jenkins',
+                                 serviceName: 'javacode',
+                                 taskDefinition: 'javacode',
+                                 containerName: 'java-container',
+                                 image: "${appRegistry}:${BUILD_NUMBER}"
                         ])
                     }
                 }
